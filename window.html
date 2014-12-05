@@ -1,0 +1,139 @@
+<html>
+<head>
+	<script>	
+		var columns = 80;
+		var rows = Math.floor(columns / 1.5);
+		var square = 6;
+		
+		var hue = new Array();
+		var saturation = new Array();
+		
+		for(i = 0; i < 360; i += 360 / columns) 
+		{
+			hue.push([i]); 
+		}
+		for(j = 0; j < 100; j += 100 / rows)
+		{
+			saturation.push([j]); 
+		}
+		
+		function DoStuff(row, col)
+		{
+			
+			for(var j = (row - square); j <= (row + square); j++)
+			{
+				for(var i = (col - square); i <= (col + square); i++)
+				{
+					if(j >= 0 && j < rows && i >= 0 && i < columns)
+					{
+						var rowcolId = 'row' + j + 'col' + i;
+						document.getElementById(rowcolId).style.backgroundColor = "RGB(0,0,0)";
+						document.getElementById(rowcolId).style.opacity = .2;
+						
+						if(j == (row - square))
+						{
+							document.getElementById(rowcolId).style.borderTop = "thin solid grey";
+						}
+						if(j == (row + square))
+						{
+							document.getElementById(rowcolId).style.borderBottom = "thin solid grey";
+						}						
+						if(i == (col - square))
+						{
+							document.getElementById(rowcolId).style.borderLeft = "thin solid grey";
+						}
+						if(i == (col + square))
+						{
+							document.getElementById(rowcolId).style.borderRight = "thin solid grey";
+						}						
+					}
+				}
+			}
+			
+			for(var t = 0; t < columns; t++)
+			{
+				var rowcolId = 'row' + row + 'col' + t;
+				var HSLColor = "HSL(" + hue[t] + "," + saturation[row] + "%, 50%)";
+				document.getElementById(rowcolId).style.backgroundColor = HSLColor;
+				document.getElementById(rowcolId).style.opacity = 1;
+			}
+			for(var g = 0; g < rows; g++)
+			{
+				var rowcolId = 'row' + g + 'col' + col;
+				var HSLColor = "HSL(" + hue[col] + "," + saturation[g] + "%, 50%)";
+				document.getElementById(rowcolId).style.backgroundColor = HSLColor;
+				document.getElementById(rowcolId).style.opacity = 1;
+			}
+			var rcid = 'row' + row + 'col' + col;
+			var HSLColor = "HSL(" + hue[col] + "," + saturation[row] + "%, 50%)";
+			document.getElementById(rcid).style.backgroundColor = HSLColor;//"white";
+			document.getElementById(rcid).style.border = "thin solid black";
+			
+		}
+		
+		function UnDoStuff(row, col)
+		{
+		
+			for(var j = (row - square); j <= (row + square); j++)
+			{
+				for(var i = (col - square); i <= (col + square); i++)
+				{
+					if(j >= 0 && j < rows && i >= 0 && i < columns)
+					{
+						var rowcolId = 'row' + j + 'col' + i;
+						document.getElementById(rowcolId).style.backgroundColor = "white";
+						document.getElementById(rowcolId).style.opacity = 1;
+						document.getElementById(rowcolId).style.border = "none";
+					}
+				}
+			}
+			for(var t = 0; t < columns; t++)
+			{
+				var rowcolId = 'row' + row + 'col' + t;
+				document.getElementById(rowcolId).style.backgroundColor = "white";
+				document.getElementById(rowcolId).style.opacity = 1;
+				document.getElementById(rowcolId).style.border = "none";
+			}
+			for(var g = 0; g < rows; g++)
+			{
+				var rowcolId = 'row' + g + 'col' + col;
+				document.getElementById(rowcolId).style.backgroundColor = "white";
+				document.getElementById(rowcolId).style.opacity = 1;
+				document.getElementById(rowcolId).style.border = "none";
+			}
+			var rcid = 'row' + row + 'col' + col;
+			document.getElementById(rcid).style.border = "none";
+		}
+		
+		function WriteRowsColumns()
+		{
+			var width = (100/columns)+ "%";
+			var height = (100/rows) + "%";
+		
+			document.writeln("<div style='height:100%;margin-left:auto;margin-right:auto;background-image: url(\"http://d1jqu7g1y74ds1.cloudfront.net/wp-content/uploads/2010/11/milkyway.jpg\");'>");
+			
+			for(j = 0; j < rows; j++)
+			{
+				for(i = 0; i < columns; i++)
+				{
+					document.write("<div style='width:" + width + ";");
+					document.write("height:"+ height + "%;");
+					document.write("float:left;");
+					document.write("background-color:white;");
+					document.write("box-sizing:border-box;");
+					document.write("-moz-box-sizing:border-box;");
+					document.write("-webkit-box-sizing:border-box;'");
+					document.write(" id='row"+ j +"col"+ i +"'");
+					document.write(" onmouseover='DoStuff("+ j +","+ i +");'");
+					document.write(" onmouseout='UnDoStuff("+ j +","+ i +");'>");
+					document.writeln("</div>")
+				}
+			}
+			document.write("<div style='padding-bottom:1%;margin-left:auto;margin-right:auto;width:100%;height:auto;float:left;background-color:grey;'>&nbsp;</div>");
+			document.writeln("</div>")		
+		}
+	</script>
+</head>
+<body onload="WriteRowsColumns();">
+</body>
+</html>

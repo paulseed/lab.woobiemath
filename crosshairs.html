@@ -1,0 +1,213 @@
+<html>
+<head>
+	<script>	
+		var columns = 100;
+		var rows = Math.floor(columns / 1.5);
+		var square = 6;
+		var points = new Array();
+		
+		function ClickStuff(row, col)
+		{
+			var rowcolId = 'row' + row + 'col' + col;
+			document.getElementById(rowcolId).style.backgroundColor = "red";
+			document.getElementById(rowcolId).style.borderRadius = "200px";
+			points.push(rowcolId);
+		}
+		
+		function DoStuff(row, col)
+		{
+			
+			for(var j = (row - square); j <= (row + square); j++)
+			{
+				for(var i = (col - square); i <= (col + square); i++)
+				{
+					if(j >= 0 && j < rows && i >= 0 && i < columns)
+					{
+						var rowcolId = 'row' + j + 'col' + i;
+
+						document.getElementById(rowcolId).style.backgroundColor = "transparent";
+						document.getElementById(rowcolId).style.border = "none";
+						document.getElementById(rowcolId).style.opacity = 1;
+						document.getElementById(rowcolId).style.borderRadius = "0px";
+
+						var border_style = "2pt solid blue";
+						if(j == (row - square))
+						{
+							document.getElementById(rowcolId).style.borderTop = border_style;
+						}
+						if(j == (row + square))
+						{
+							document.getElementById(rowcolId).style.borderBottom = border_style;
+						}						
+						if(i == (col - square))
+						{
+							document.getElementById(rowcolId).style.borderLeft = border_style;
+						}
+						if(i == (col + square))
+						{
+							document.getElementById(rowcolId).style.borderRight = border_style;
+						}	
+					}
+				}
+			}
+			
+			//draw vertical
+			for(var t = 0; t < columns; t++)
+			{
+				var rowcolId = 'row' + row + 'col' + t;
+				document.getElementById(rowcolId).style.backgroundColor = "grey";
+				if(t >= (col - square) && t<= (col + square))
+				{
+					document.getElementById(rowcolId).style.backgroundColor = "orange";
+				}
+			}
+			//draw horizontal
+			for(var g = 0; g < rows; g++)
+			{
+				var rowcolId = 'row' + g + 'col' + col;
+				document.getElementById(rowcolId).style.backgroundColor = "grey";
+				if(g >= (row - square) && g <= (row + square))
+				{
+					document.getElementById(rowcolId).style.backgroundColor = "orange";
+				}
+			}
+			//draw border around outside target center
+			for(var j = (row - 1); j <= (row + 1); j++)
+			{
+				for(var i = (col - 1); i <= (col + 1); i++)
+				{
+					var rcid = 'row' + j + 'col' + i;
+					document.getElementById(rcid).style.backgroundColor = "transparent";
+					var border_style2 = "2pt solid white";
+					if(j == (row - 1))
+					{
+						document.getElementById(rcid).style.borderTop = border_style2;
+					}
+					if(j == (row + 1))
+					{
+						document.getElementById(rcid).style.borderBottom = border_style2;
+					}						
+					if(i == (col - 1))
+					{
+						document.getElementById(rcid).style.borderLeft = border_style2;
+					}
+					if(i == (col + 1))
+					{
+						document.getElementById(rcid).style.borderRight = border_style2;
+					}
+					
+				}	
+			}
+			//target center
+			var rcid = 'row' + row + 'col' + col;
+			document.getElementById(rcid).style.border = "thin solid red";
+			document.getElementById(rcid).style.borderRadius = "200px";
+		}
+		
+		function UnDoStuff(row, col)
+		{
+		
+			for(var j = (row - square); j <= (row + square); j++)
+			{
+				for(var i = (col - square); i <= (col + square); i++)
+				{
+					if(j >= 0 && j < rows && i >= 0 && i < columns)
+					{
+						var rowcolId = 'row' + j + 'col' + i;
+						if(points.indexOf(rowcolId) < 0 )
+						{
+							document.getElementById(rowcolId).style.backgroundColor = "transparent";
+							document.getElementById(rowcolId).style.border = "none";
+							document.getElementById(rowcolId).style.opacity = 1;
+						}
+						else
+						{
+							document.getElementById(rowcolId).style.backgroundColor = "red"
+							document.getElementById(rowcolId).style.border = "none";
+							document.getElementById(rowcolId).style.borderRadius = "200px";
+						}
+					}
+				}
+			}
+			for(var t = 0; t < columns; t++)
+			{
+				var rowcolId = 'row' + row + 'col' + t;
+				if(points.indexOf(rowcolId) < 0 )
+				{
+					document.getElementById(rowcolId).style.backgroundColor = "transparent";
+					document.getElementById(rowcolId).style.border = "none";
+					document.getElementById(rowcolId).style.opacity = 1;
+				}
+				else
+				{
+					document.getElementById(rowcolId).style.backgroundColor = "red"
+					document.getElementById(rowcolId).style.border = "none";
+					document.getElementById(rowcolId).style.borderRadius = "200px";
+				}
+
+			}
+			for(var g = 0; g < rows; g++)
+			{
+				var rowcolId = 'row' + g + 'col' + col;
+				if(points.indexOf(rowcolId) < 0 )
+				{
+					document.getElementById(rowcolId).style.backgroundColor = "transparent";
+					document.getElementById(rowcolId).style.border = "none";
+					document.getElementById(rowcolId).style.opacity = 1;
+				}
+				else
+				{
+					document.getElementById(rowcolId).style.backgroundColor = "red"
+					document.getElementById(rowcolId).style.border = "none";
+					document.getElementById(rowcolId).style.borderRadius = "200px";
+				}				
+
+			}
+			var rcid = 'row' + row + 'col' + col;
+			if(points.indexOf(rcid) < 0 )
+			{
+				document.getElementById(rcid).style.border = "none";
+				document.getElementById(rcid).style.opacity = 1;
+			}
+			else
+			{
+				document.getElementById(rcid).style.backgroundColor = "red"
+				document.getElementById(rcid).style.border = "none";
+				document.getElementById(rowcolId).style.borderRadius = "200px";
+			}			
+
+		}
+		
+		function WriteRowsColumns()
+		{
+			var width = (100/columns)+ "%";
+			var height = (100/rows) + "%";
+		
+			document.writeln("<div style='height:100%;margin-left:auto;margin-right:auto;background-image: url(\"http://d1jqu7g1y74ds1.cloudfront.net/wp-content/uploads/2010/11/milkyway.jpg\");'>");
+			
+			for(j = 0; j < rows; j++)
+			{
+				for(i = 0; i < columns; i++)
+				{
+					document.write("<div style='width:" + width + ";");
+					document.write("height:"+ height + "%;");
+					document.write("float:left;");
+					document.write("background-color:transparent;");
+					document.write("box-sizing:border-box;");
+					document.write("-moz-box-sizing:border-box;");
+					document.write("-webkit-box-sizing:border-box;'");
+					document.write(" id='row"+ j +"col"+ i +"'");
+					document.write(" onmouseover='DoStuff("+ j +","+ i +");'");
+					document.write(" onmouseout='UnDoStuff("+ j +","+ i +");'");
+					document.write(" onclick='ClickStuff("+ j +","+ i +");'>");
+					document.writeln("</div>")
+				}
+			}
+			document.write("<div style='padding-bottom:1%;margin-left:auto;margin-right:auto;width:100%;height:auto;float:left;background-color:grey;'>&nbsp;</div>");
+			document.writeln("</div>")		
+		}
+	</script>
+</head>
+<body onload="WriteRowsColumns();">
+</body>
+</html>
