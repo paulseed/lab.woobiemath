@@ -1,0 +1,25 @@
+#intro, #welcome{
+    width:100%;
+    height: 100%;
+    background-color: black;
+    position: fixed;
+    top:0;
+    left:0;
+
+    display:inline;
+}
+#intro{
+    z-index: 4;
+}
+#welcome{
+    z-index: 3;
+}
+#embed, #welcometext{
+    display: table-cell;
+    margin:0 auto;
+    width:98%;
+}
+#welcometext{
+    text-align: center;
+    border:solid 5px red;
+}

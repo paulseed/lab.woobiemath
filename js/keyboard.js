@@ -1,75 +1,37 @@
 var context = new webkitAudioContext();
+var recorder;
 
-var oscA = context.createOscillator();
-var oscS = context.createOscillator();
-var oscD = context.createOscillator();
-var oscF = context.createOscillator();
-var oscG = context.createOscillator();
-var oscH = context.createOscillator();
-var oscJ = context.createOscillator();
-var oscK = context.createOscillator();
-var oscL = context.createOscillator();
-var oscSEMI = context.createOscillator();
-var oscTICK = context.createOscillator();
-var oscQ = context.createOscillator();
-var oscW = context.createOscillator();
-var oscE = context.createOscillator();
-var oscR = context.createOscillator();
-var oscT = context.createOscillator();
-var oscY = context.createOscillator();
-var oscU = context.createOscillator();
-var oscI = context.createOscillator();
-var oscO = context.createOscillator();
-var oscP = context.createOscillator();
-var oscLB = context.createOscillator();
-var oscRB = context.createOscillator();
-var oscZ = context.createOscillator();
-var oscX = context.createOscillator();
-var oscC = context.createOscillator();
-var oscV = context.createOscillator();
-var oscB = context.createOscillator();
-var oscN = context.createOscillator();
-var oscM = context.createOscillator();
-var oscComma = context.createOscillator();
-var oscDot = context.createOscillator();
-var oscSlash = context.createOscillator();
+var oscA, oscS, oscD, oscF, oscG, oscH, oscJ, oscK, oscL, oscSEMI, oscTICK, oscQ, oscW, oscE, oscR, oscT, oscY, oscU,
+    oscI, oscO, oscP, oscLB, oscRB, oscZ, oscX, oscC, oscV, oscB, oscN, oscM, oscComma, oscDot, oscSlash, oscSpace;
 
-var vcaA = context.createGain();
-var vcaS = context.createGain();
-var vcaD = context.createGain();
-var vcaF = context.createGain();
-var vcaG = context.createGain();
-var vcaH = context.createGain();
-var vcaJ = context.createGain();
-var vcaK = context.createGain();
-var vcaL = context.createGain();
-var vcaSEMI = context.createGain();
-var vcaTICK = context.createGain();
-var vcaQ = context.createGain();
-var vcaW = context.createGain();
-var vcaE = context.createGain();
-var vcaR = context.createGain();
-var vcaT = context.createGain();
-var vcaY = context.createGain();
-var vcaU = context.createGain();
-var vcaI = context.createGain();
-var vcaO = context.createGain();
-var vcaP = context.createGain();
-var vcaLB = context.createGain();
-var vcaRB = context.createGain();
-var vcaZ = context.createGain();
-var vcaX = context.createGain();
-var vcaC = context.createGain();
-var vcaV = context.createGain();
-var vcaB = context.createGain();
-var vcaN = context.createGain();
-var vcaM = context.createGain();
-var vcaComma = context.createGain();
-var vcaDot = context.createGain();
-var vcaSlash = context.createGain();
+var vcaA,vcaS, vcaD, vcaF, vcaG, vcaH, vcaJ, vcaK, vcaL, vcaSEMI, vcaTICK, vcaQ, vcaW, vcaE, vcaR, vcaT, vcaY, vcaU,
+    vcaI, vcaO, vcaP, vcaLB, vcaRB, vcaZ, vcaX, vcaC, vcaV, vcaB, vcaN, vcaM, vcaComma, vcaDot, vcaSlash, vcaSpace;
 
-function loaded(){
+function init(){
 
+    try {
+        // webkit shim
+        window.AudioContext = window.webkitAudioContext;
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+        window.URL = window.URL || window.webkitURL;
+
+    } catch (e) {
+        alert('No web audio support in this browser!');
+    }
+
+    navigator.getUserMedia({audio: true},
+        function(stream){
+            $("#recorderContainer").css({display:"inline"});
+            var input = context.createMediaStreamSource(stream);
+            recorder = new Recorder(input,{workerPath:"js/vendor/recorderjs/recorderWorker.js"});
+        },
+        function(e) {
+            //oh well
+        }
+    );
+
+    createOscillators();
+    createGains();
     setWaveType();
     setFrequency();
     startOscillators();
@@ -77,6 +39,124 @@ function loaded(){
     connectGain();
     connectDestination();
     bindMouseTrap();
+};
+
+function createDownloadLink() {
+    recorder && recorder.exportWAV(function(blob) {
+        var url = URL.createObjectURL(blob);
+        var li = document.createElement('li');
+        var au = document.createElement('audio');
+        var hf = document.createElement('a');
+
+        au.controls = true;
+        au.src = url;
+        hf.href = url;
+        hf.download = new Date().toISOString() + '.wav';
+        hf.innerHTML = hf.download;
+        li.appendChild(au);
+        li.appendChild(hf);
+        if(recordingslist.childElementCount > 2){
+            recordingslist.removeChild(recordingslist.firstChild);
+        }
+        recordingslist.appendChild(li);
+    });
+}
+
+function start(button) {
+    recorder && recorder.record();
+    button.disabled = true;
+    button.nextElementSibling.disabled = false;
+    $("#recordBtn").css({backgroundColor: "#0f0"});
+    $("#stopBtn").css({backgroundColor: "#f00"});
+};
+
+function stop(button) {
+    recorder && recorder.stop();
+    button.disabled = true;
+    button.previousElementSibling.disabled = false;
+    $("#recordBtn").css({backgroundColor: "#ccc"});
+    $("#stopBtn").css({backgroundColor: "#555"});
+
+    // create WAV download link using audio data blob
+    createDownloadLink();
+
+    recorder.clear();
+};
+
+function createOscillators(){
+    
+     oscA = context.createOscillator();
+     oscS = context.createOscillator();
+     oscD = context.createOscillator();
+     oscF = context.createOscillator();
+     oscG = context.createOscillator();
+     oscH = context.createOscillator();
+     oscJ = context.createOscillator();
+     oscK = context.createOscillator();
+     oscL = context.createOscillator();
+     oscSEMI = context.createOscillator();
+     oscTICK = context.createOscillator();
+     oscQ = context.createOscillator();
+     oscW = context.createOscillator();
+     oscE = context.createOscillator();
+     oscR = context.createOscillator();
+     oscT = context.createOscillator();
+     oscY = context.createOscillator();
+     oscU = context.createOscillator();
+     oscI = context.createOscillator();
+     oscO = context.createOscillator();
+     oscP = context.createOscillator();
+     oscLB = context.createOscillator();
+     oscRB = context.createOscillator();
+     oscZ = context.createOscillator();
+     oscX = context.createOscillator();
+     oscC = context.createOscillator();
+     oscV = context.createOscillator();
+     oscB = context.createOscillator();
+     oscN = context.createOscillator();
+     oscM = context.createOscillator();
+     oscComma = context.createOscillator();
+     oscDot = context.createOscillator();
+     oscSlash = context.createOscillator();
+     oscSpace = context.createOscillator();
+};
+
+function createGains(){
+
+     vcaA = context.createGain();
+     vcaS = context.createGain();
+     vcaD = context.createGain();
+     vcaF = context.createGain();
+     vcaG = context.createGain();
+     vcaH = context.createGain();
+     vcaJ = context.createGain();
+     vcaK = context.createGain();
+     vcaL = context.createGain();
+     vcaSEMI = context.createGain();
+     vcaTICK = context.createGain();
+     vcaQ = context.createGain();
+     vcaW = context.createGain();
+     vcaE = context.createGain();
+     vcaR = context.createGain();
+     vcaT = context.createGain();
+     vcaY = context.createGain();
+     vcaU = context.createGain();
+     vcaI = context.createGain();
+     vcaO = context.createGain();
+     vcaP = context.createGain();
+     vcaLB = context.createGain();
+     vcaRB = context.createGain();
+     vcaZ = context.createGain();
+     vcaX = context.createGain();
+     vcaC = context.createGain();
+     vcaV = context.createGain();
+     vcaB = context.createGain();
+     vcaN = context.createGain();
+     vcaM = context.createGain();
+     vcaComma = context.createGain();
+     vcaDot = context.createGain();
+     vcaSlash = context.createGain();
+     vcaSpace = context.createGain();
 };
 
 function setWaveType(){
@@ -114,6 +194,7 @@ function setWaveType(){
     oscComma.type = oscComma.SINE;
     oscDot.type = oscDot.SINE;
     oscSlash.type = oscSlash.SINE;
+    oscSpace.type = oscSpace.SINE;
 };
 
 function setFrequency(){
@@ -156,6 +237,9 @@ function setFrequency(){
     oscP.frequency.value = 1046.5;
     oscLB.frequency.value = 1108.73;
     oscRB.frequency.value = 1174.66;
+
+    //SPACE ROW
+    oscSpace.frequency.value = 174.61;
 };
 
 function startOscillators(){
@@ -193,6 +277,7 @@ function startOscillators(){
     oscComma.start(0);
     oscDot.start(0);
     oscSlash.start(0);
+    oscSpace.start(0);
 };
 
 function setGain(){
@@ -230,6 +315,7 @@ function setGain(){
     vcaComma.gain.value = 0;
     vcaDot.gain.value = 0;
     vcaSlash.gain.value = 0;
+    vcaSpace.gain.value = 0;
 };
 
 function connectGain(){
@@ -267,6 +353,7 @@ function connectGain(){
     oscComma.connect(vcaComma);
     oscDot.connect(vcaDot);
     oscSlash.connect(vcaSlash);
+    oscSpace.connect(vcaSpace);
 };
 
 function connectDestination(){
@@ -304,10 +391,23 @@ function connectDestination(){
     vcaComma.connect(context.destination);
     vcaDot.connect(context.destination);
     vcaSlash.connect(context.destination);
+    vcaSpace.connect(context.destination);
 };
 
 function bindMouseTrap(){
 
+    Mousetrap.bind("shift+r",function(){
+        var recordBtn = document.getElementById("recordBtn");
+        if(!recordBtn.disabled){
+            start(recordBtn);
+        }
+    });
+    Mousetrap.bind("shift+s",function(){
+        var stopBtn = document.getElementById("stopBtn");
+        if(!stopBtn.disabled){
+            stop(stopBtn);
+        }
+    });
 
     Mousetrap.bind('q',function(){
         vcaQ.gain.value = 1;
@@ -317,9 +417,6 @@ function bindMouseTrap(){
         vcaQ.gain.value = 0;
         document.getElementById("btn-q").style.backgroundColor = "inherit";
     },'keyup');
-
-
-
     Mousetrap.bind('w',function(){
         vcaW.gain.value = 1;
         document.getElementById("btn-w").style.backgroundColor = "rgb(64, 0, 0)";
@@ -589,4 +686,15 @@ function bindMouseTrap(){
         vcaSlash.gain.value = 0;
         document.getElementById("btn-slash").style.backgroundColor = "inherit";
     },'keyup');
+
+    Mousetrap.bind('space',function(){
+        vcaSpace.gain.value = 1;
+        document.getElementById("btn-space").style.backgroundColor = "rgb(204, 116, 0)";
+    },'keydown');
+    Mousetrap.bind('space',function(){
+        vcaSpace.gain.value = 0;
+        document.getElementById("btn-space").style.backgroundColor = "inherit";
+    },'keyup');
 };
+
+window.onload = init;

@@ -18,12 +18,12 @@
         <script src="js/vendor/mousetrap.min.js"></script>
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
     </head>
-    <body onload="loaded();" id="body">
+    <body id="body">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div class="tray">
-            <div class="keyboard">
+        <div class="fullWidth">
+            <div class="centered90">
                 <div id="toprow">
                     <div id="btn-q" class="key">Q</div>
                     <div id="btn-w" class="key">W</div>
@@ -63,12 +63,22 @@
                     <div id="btn-dot" class="key">.</div>
                     <div id="btn-slash" class="key">/</div>
                 </div>
+                <div id="spacerow">
+                    <div id="btn-space" class="key">&nbsp;</div>
+                </div>
             </div>
         </div>
-
+        <div class="fullWidth" id="recorderContainer">
+            <div class="centered90">
+                <button title="shift+r" class="key" id="recordBtn" onclick="start(this);">record</button>
+                <button title="shift+s" class="key" id="stopBtn" onclick="stop(this);" disabled>stop</button>
+                <ul id="recordingslist"></ul>
+            </div>
+        </div>
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
         <script src="js/plugins.js"></script>
         <script src="js/keyboard.js"></script>
+        <script src="js/vendor/recorderjs/recorder.js"></script>
     </body>
 </html>

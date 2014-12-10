@@ -8,14 +8,23 @@
   border-radius: .3em;
   margin: 3px;
   color:#444444;
+  line-height: 1.2;
 }
-.tray {
-  width: 100vw;
 
+#recordBtn{
+  width:24vw;
+  background-color: #ccc;
 }
-.keyboard{
+#stopBtn{
+  width:18vw;
+  background-color: #555;
+}
+.fullWidth {
+  width: 100vw;
+}
+.centered90{
   width: 90vw;
-  margin:15vh auto;
+  margin:4vh auto;
   text-align: center;
   white-space: nowrap;
 }
@@ -30,7 +39,7 @@ a:visited{
   text-decoration: none;
   color:#105cb6;
 }
-#toprow, #middlerow, #bottomrow{
+#toprow, #middlerow, #bottomrow, #spacerow{
   float:left;
 }
 #middlerow{
@@ -38,4 +47,23 @@ a:visited{
 }
 #bottomrow{
   padding-left: 4vw;
+}
+#spacerow{
+  padding-left: 18.6vw;
+}
+#btn-space {
+  width: 35vw;
+}
+#recordingslist{
+  float:right;
+  list-style-type: none;
+}
+
+#recorderContainer{
+  float:left;
+  margin-top: -1.5vh;
+  display: none;
+}
+#recorderContainer a{
+  padding-left:1.2vw;
 }
