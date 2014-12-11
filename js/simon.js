@@ -124,7 +124,6 @@ function red(){
     osc.frequency.value = freqRed;
     volume.gain.value = 1;
     signals.push(red);
-    alert("sdsds");
 };
 
 function yellow(){
