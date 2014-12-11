@@ -1,4 +1,4 @@
-var context = new webkitAudioContext();
+var context = new AudioContext();
 var recorder;
 
 var oscA, oscS, oscD, oscF, oscG, oscH, oscJ, oscK, oscL, oscSEMI, oscTICK, oscQ, oscW, oscE, oscR, oscT, oscY, oscU,
@@ -11,7 +11,7 @@ function init(){
 
     try {
         // webkit shim
-        window.AudioContext = window.webkitAudioContext;
+        window.AudioContext = window.AudioContext || window.webkitAudioContext;
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
         window.URL = window.URL || window.webkitURL;
 
