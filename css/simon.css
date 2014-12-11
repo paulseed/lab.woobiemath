@@ -59,3 +59,15 @@ body{
     margin-top:1vh;
     margin-left: -2.5vh;
 }
+.button{
+    width:auto;
+    font-weight: bold;
+    font-size: 9vh;
+    text-align: center;
+    border: solid 5px #444444;
+    border-radius: .3em;
+    color:#444444;
+    line-height: 1.2;
+    margin-top: 16vh;
+    padding: 1vh;
+}
